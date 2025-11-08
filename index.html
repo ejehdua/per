@@ -176,24 +176,40 @@
     }
 
     .details-panel li {
-      padding: 12px 0;
+      padding: 15px 0;
       border-bottom: 1px solid #e0e0e0;
       font-size: 16px;
       color: #333;
       position: relative;
-      padding-right: 25px;
     }
 
     .details-panel li:last-child {
       border-bottom: none;
     }
 
-    .details-panel li:before {
+    .detail-title {
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 8px;
+      font-size: 16px;
+      position: relative;
+      padding-right: 25px;
+    }
+
+    .detail-title:before {
       content: "✓";
       position: absolute;
       right: 0;
       color: #667eea;
       font-weight: bold;
+    }
+
+    .detail-definition {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-top: 5px;
+      font-weight: normal;
     }
 
     .placeholder-text {
@@ -705,29 +721,19 @@
           <p class="placeholder-text">פירוט יתווסף בקרוב...</p>
         `;
       } else {
-        const detailsList = category.details.map(detail => `<li>${detail}</li>`).join('');
-        
-        let legendHtml = '';
-        if (category.legend) {
-          const legendItems = Object.entries(category.legend).map(([term, definition]) => 
-            `<div class="legend-item">
-              <div class="legend-term">${term}</div>
-              <div class="legend-definition">${definition}</div>
-            </div>`
-          ).join('');
-          
-          legendHtml = `
-            <div class="legend-section">
-              <h3>מקראה</h3>
-              ${legendItems}
-            </div>
+        const detailsList = category.details.map(detail => {
+          const definition = category.legend && category.legend[detail] ? category.legend[detail] : '';
+          return `
+            <li>
+              <div class="detail-title">${detail}</div>
+              ${definition ? `<div class="detail-definition">${definition}</div>` : ''}
+            </li>
           `;
-        }
+        }).join('');
         
         panel.innerHTML = `
           <h2>${category.name}</h2>
           <ul>${detailsList}</ul>
-          ${legendHtml}
         `;
       }
     }
@@ -745,29 +751,19 @@
         return;
       }
       
-      const detailsList = subcategory.details.map(detail => `<li>${detail}</li>`).join('');
-      
-      let legendHtml = '';
-      if (subcategory.legend) {
-        const legendItems = Object.entries(subcategory.legend).map(([term, definition]) => 
-          `<div class="legend-item">
-            <div class="legend-term">${term}</div>
-            <div class="legend-definition">${definition}</div>
-          </div>`
-        ).join('');
-        
-        legendHtml = `
-          <div class="legend-section">
-            <h3>מקראה</h3>
-            ${legendItems}
-          </div>
+      const detailsList = subcategory.details.map(detail => {
+        const definition = subcategory.legend && subcategory.legend[detail] ? subcategory.legend[detail] : '';
+        return `
+          <li>
+            <div class="detail-title">${detail}</div>
+            ${definition ? `<div class="detail-definition">${definition}</div>` : ''}
+          </li>
         `;
-      }
+      }).join('');
       
       panel.innerHTML = `
         <h2>${subcategoryName}</h2>
         <ul>${detailsList}</ul>
-        ${legendHtml}
       `;
     }
 
@@ -799,11 +795,21 @@
       const liElements = detailsPanel.querySelectorAll('li');
       liElements.forEach(li => {
         li.style.borderBottomColor = config.accent_color || defaultConfig.accent_color;
-        li.style.fontSize = `${baseSize}px`;
-        li.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      });
+
+      const detailTitles = detailsPanel.querySelectorAll('.detail-title');
+      detailTitles.forEach(title => {
+        title.style.fontSize = `${baseSize}px`;
+        title.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      });
+
+      const detailDefinitions = detailsPanel.querySelectorAll('.detail-definition');
+      detailDefinitions.forEach(definition => {
+        definition.style.fontSize = `${baseSize * 0.875}px`;
+        definition.style.fontFamily = `${customFont}, ${baseFontStack}`;
       });
       
-      const beforeElements = detailsPanel.querySelectorAll('li:before');
+      const beforeElements = detailsPanel.querySelectorAll('.detail-title:before');
       beforeElements.forEach(before => {
         before.style.color = config.primary_color || defaultConfig.primary_color;
       });
@@ -875,5 +881,5 @@
 
     createCircles();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99b7f88d6158a9bd',t:'MTc2MjYzNTMyMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99b7fc927488a9bd',t:'MTc2MjYzNTQ4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
