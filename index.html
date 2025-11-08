@@ -11,11 +11,25 @@
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      background-attachment: fixed;
       min-height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 219, 226, 0.2) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
     }
 
     html {
@@ -26,6 +40,7 @@
       width: 90%;
       max-width: 1200px;
       padding: 40px 20px;
+      margin: 0 auto;
     }
 
     .header {
@@ -69,6 +84,8 @@
       justify-content: center;
       box-shadow: 0 8px 25px rgba(0,0,0,0.15);
       border: 3px solid rgba(255,255,255,0.3);
+      width: 140px;
+      height: 140px;
     }
 
     .main-circle:hover {
@@ -90,12 +107,12 @@
     .circle-label {
       color: white;
       font-weight: bold;
-      font-size: 14px;
+      font-size: 16px;
       text-align: center;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-      padding: 10px;
+      padding: 15px;
       line-height: 1.2;
-      max-width: 80px;
+      max-width: 110px;
     }
 
     .sub-circle {
@@ -186,6 +203,47 @@
       padding: 40px 20px;
     }
 
+    .legend-section {
+      background: rgba(255,255,255,0.95);
+      border-radius: 15px;
+      padding: 25px;
+      margin-top: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    .legend-section h3 {
+      color: #667eea;
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 20px;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 8px;
+    }
+
+    .legend-item {
+      display: flex;
+      margin-bottom: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .legend-item:last-child {
+      border-bottom: none;
+    }
+
+    .legend-term {
+      font-weight: bold;
+      color: #333;
+      min-width: 200px;
+      margin-left: 15px;
+      flex-shrink: 0;
+    }
+
+    .legend-definition {
+      color: #666;
+      line-height: 1.4;
+    }
+
     @media (max-width: 768px) {
       .content-wrapper {
         flex-direction: column;
@@ -259,7 +317,15 @@
           "חוזקות אישיות",
           "אתגרים אישיים",
           "התאמות בלמידה"
-        ]
+        ],
+        legend: {
+          "נתונים דמוגרפיים בסיסיים": "גיל, מגדר, שכבת גיל, מסגרת לימודים, מגמה או תחום התמחות.",
+          "רקע משפחתי": "מבנה משפחתי, מצב כלכלי־חברתי כללי, גורמי תמיכה משמעותיים בבית.",
+          "מצב חברתי ושייכות": "יחסים בין־אישיים בכיתה ובבית הספר, רמת תחושת שייכות לקבוצה, מעורבות חברתית.",
+          "חוזקות אישיות": "תחומים שבהם הלומד מצטיין או מגלה ביטוי חיובי – קוגניטיבי, רגשי, חברתי או יצירתי.",
+          "אתגרים אישיים": "תחומים שבהם הלומד מתמודד עם קושי מתמשך, פער או חסם תפקודי/רגשי/חברתי.",
+          "התאמות בלמידה": "התאמות פדגוגיות או טכנולוגיות הניתנות ללומד לצורך למידה מיטבית (כגון: הארכת זמן, סיוע בקריאה, סביבה מותאמת)."
+        }
       },
       {
         name: "ידע",
@@ -270,32 +336,81 @@
           "תפיסות שגויות",
           "ידע נרכש",
           "רמות חשיבה"
-        ]
+        ],
+        legend: {
+          "ידע עולם": "הידע הרחב שהלומד מביא מעולמו החברתי, התרבותי והאישי, שאינו תלוי בתוכן הלימודי הספציפי.",
+          "ידע קודם דיסיפלינרי": "הידע התוכני שהלומד כבר רכש בתחום דעת מסוים – למשל, מושגים, דמויות, אירועים, הבנה של מונחים, עקרונות, או תהליכים רלוונטיים לנושא הנלמד.",
+          "תפיסות שגויות": "הבנות לא מדויקות, הנחות יסוד מוטעות או דפוסי חשיבה שגויים שהלומד פיתח לאורך הדרך – לעיתים בעקבות ניסיון אישי, הוראה לא עקבית או הכללות שגויות.",
+          "ידע נרכש": "הידע החדש שנלמד בפועל בתהליך הלמידה – מושגים, כלים, עקרונות או קשרים שנוצרו בעקבות חשיפה לתוכן חדש. הידע הנרכש נבנה על בסיס הידע הקודם אך מרחיב ומעמיק אותו.",
+          "רמות חשיבה": "שלבי העומק שבהם הלומד לומד ועושה שימוש במידע – מהבנה בסיסית וזכירת עובדות, דרך שימוש בידע לצורך רכישת חדש, ניתוח והסקה, ועד חשיבה מסדר גבוה הכוללת העברה בין תחומים, הערכה ויצירה. התחום נשען על מדרג בלום ומאפשר אפיון איכות הלמידה ולא רק כמות הידע."
+        }
       },
       {
         name: "כישורים ומיומנויות",
         color: "#98D8C8",
         details: [
-          "מיומנויות חברתיות-רגשיות: תקשורת - העברת מסר",
-          "מיומנויות חברתיות-רגשיות: עבודת צוות",
-          "מיומנויות חברתיות-רגשיות: מודעות והתנהלות חברתית",
-          "מיומנויות חברתיות-רגשיות: מודעות עצמית",
-          "מיומנויות תפקודיות: ניהול עצמי",
-          "מיומנויות תפקודיות: חוסן והסתגלות לשינויים",
-          "מיומנויות קוגניטיביות: חשיבה ביקורתית",
-          "מיומנויות קוגניטיביות: חשיבה יצירתית ופתרון בעיות",
-          "מיומנויות קוגניטיביות: קבלת החלטות",
-          "מיומנויות אורייניות: אוריינות לשונית – איתור מידע, פרשנות והיסק",
-          "מיומנויות אורייניות: אוריינות לשונית – הבעה בכתב",
-          "מיומנויות אורייניות: אוריינות לשונית – הבעה בעל פה",
-          "מיומנויות אורייניות: חשיבה ביקורתית – טיעון",
-          "מיומנויות אורייניות: חשיבה יצירתית – סקרנות ומקוריות",
-          "מיומנויות אורייניות: חשיבה יצירתית – גמישות מחשבתית",
-          "מיומנויות אורייניות: חשיבה יצירתית – יצירת הקשרים חדשים",
-          "מיומנויות אורייניות: אוריינות דיגיטלית – צריכה ויצירה של תוכן",
-          "מיומנויות אורייניות: אוריינות מידע – כלל יכולות הליבה",
-          "מיומנויות דיסציפלינריות: עדין בתהליך גיבוש מול הדיסיפלינות"
-        ]
+          "מיומנויות חברתיות-רגשיות",
+          "מיומנויות תפקודיות", 
+          "מיומנויות קוגניטיביות",
+          "מיומנויות אורייניות",
+          "מיומנויות דיסציפלינריות"
+        ],
+        subcategories: {
+          "מיומנויות חברתיות-רגשיות": {
+            details: [
+              "תקשורת - העברת מסר",
+              "עבודת צוות",
+              "מודעות והתנהלות חברתית",
+              "מודעות עצמית"
+            ],
+            legend: {
+              "תקשורת - העברת מסר": "יכולת להעביר מסר בבהירות, יכולת להציג נושא מול קהל (פרזנטציה)",
+              "עבודת צוות": "יכולת לקבל ולחלוק מידע, ביצוע משימות באופן שיתופי, הכרת החוזקות והתרומה שלי לצוות וזיהוי תחומים בהם אתרם, קבלת החלטות משותפת תוך ראיית טובת הכלל, לדעת להביע ולקבל דעות והסתייגויות, גמישות תפקודית, מנהיגות והובלה",
+              "מודעות והתנהלות חברתית": "יכולת לזהות נורמות חברתיות ולפעול על פיהן, יכולת לנווט במצבים חברתיים- הבנת מסרים מרומזים מילוליים ובלתי מילוליים, יכולת לזהות מצבי פגיעה בזולת ומצבים בהם אחרים זקוקים לעזרה, מתן כבוד לזולת, אמפתיה לזולת, הבנת השפעת פעולות הפרט על אחרים, רגישות תרבותית",
+              "מודעות עצמית": "הכרת הרגשות, החוזקות והחולשות האישיות, יכולת לזהות ולווסת רגשות, הבנת השפעת הרגשות על התנהגות ועל אחרים"
+            }
+          },
+          "מיומנויות תפקודיות": {
+            details: [
+              "ניהול עצמי",
+              "חוסן והסתגלות לשינויים"
+            ],
+            legend: {
+              "ניהול עצמי": "הצבת מטרות ויעדים, תכנון וארגון סדר הפעולות ולוחות הזמנים להשגת המטרה, הוצאה לפועל של התוכנית בהתמדה, ביעילות ובהתאם לתכנון, ניהול זמן, תיעדוף משימות והבחנה בן עיקר לטפל, יכולת לבצע בקרה ולשנות את ההתנהלות בהתאם לשינויים ואילוצים",
+              "חוסן והסתגלות לשינויים": "הבנה של המציאות הסובבת, גמישות התנהגותית - נכונות להשתנות ולהתאים עצמי למצב, סובלנות לעמימות והתמודדות רגשית ותפקודית אפקטיבית עם חוסר ודאות, נכונות לגשת ולהתנסות בדברים חדשים, יכולת למידה מהירה של מצבים ונושאים חדשים, יכולת להתמודד עם אתגרים, מצוקות ולחצים תוך כדי שמירה על תפקוד מיטבי, התאוששות מהירה וצמיחה אישית"
+            }
+          },
+          "מיומנויות קוגניטיביות": {
+            details: [
+              "חשיבה ביקורתית",
+              "חשיבה יצירתית ופתרון בעיות",
+              "קבלת החלטות"
+            ],
+            legend: {
+              "חשיבה ביקורתית": "הטלת ספק והבחנה בין דעות לעובדות, הערכת אמינות מקורות המידע, שקילת עמדות וטענות מתוך איסוף נתונים תומכים או מפריכים, בחינת חלופות, שיפוט ערכי ומודעות להטיות",
+              "חשיבה יצירתית ופתרון בעיות": "מקוריות - פתיחות לרעיונות חדשים, יכולת לחשוב מחוץ לקופסא, להפתיע, גמישות מחשבתית - היכולת לחשוב במגוון דרכים, מנקודות מבט לא קונבנציונליות, להכיל מורכבות בחשיבה, יצירת הקשרים חדשים ו/או ידע חדש (בין מושגים או רעיונות, בין פרטי מידע), איסוף נתונים שיטתי - יכולת לאסוף את המידע על הבעיה ולארגנו בצורה מסודרת ושיטתית, ניתוח נתונים אנאליטי - היכולת לנתח את המידע, להבין איך לחבר בין חלקי ידע שונים כדי לייצר תהליך לוגי למענה לבעיה",
+              "קבלת החלטות": "היכולת להגדיר בעיה ולבצע תהליך מושכל של איסוף מידע, הגדרת חלופות ושיקולים והערכת החלופות. שילוב אינטגרטיבי של ידע, ניסיון, אינטואיציה ורגשות בתהליך קבלת ההחלטה. בחירת חלופה מיטבית ולקיחת אחריות על תוצאת ההחלטה."
+            }
+          },
+          "מיומנויות אורייניות": {
+            details: [
+              "אוריינות לשונית – איתור מידע, פרשנות והיסק",
+              "אוריינות לשונית – הבעה בכתב",
+              "אוריינות לשונית – הבעה בעל פה",
+              "חשיבה ביקורתית – טיעון",
+              "חשיבה יצירתית – סקרנות ומקוריות",
+              "חשיבה יצירתית – גמישות מחשבתית",
+              "חשיבה יצירתית – יצירת הקשרים חדשים",
+              "אוריינות דיגיטלית – צריכה ויצירה של תוכן",
+              "אוריינות מידע – כלל יכולות הליבה"
+            ]
+          },
+          "מיומנויות דיסציפלינריות": {
+            details: [
+              "משתנה בין תחומי הדעת"
+            ]
+          }
+        }
       },
       {
         name: "מוטיבציה",
@@ -310,6 +425,11 @@
         ]
       },
       {
+        name: "זהות וערכים",
+        color: "#DDA0DD",
+        details: []
+      },
+      {
         name: "מאפייני למידה",
         color: "#FFA07A",
         details: [
@@ -320,12 +440,23 @@
           "בקשת עזרה",
           "תגובה למשוב",
           "העדפות אישיות בלמידה"
-        ]
+        ],
+        legend: {
+          "נוכחות ומעורבות בלמידה": "נוכחות בשיעורים, השתתפות בדיונים, תגובה במשימות סינכרוניות וא־סינכרוניות, עמידה בזמנים.",
+          "רמת השקעה והתמדה": "המאמץ והעקביות שהלומד משקיע לאורך זמן, גם במצבי קושי או עייפות.",
+          "עצמאות בלמידה": "היכולת של הלומד לנהל את למידתו באופן עצמאי, לבחור דרכי פעולה ולפתור בעיות מבלי להסתמך תמיד על אחרים.",
+          "שימוש באסטרטגיות למידה": "היכולת לבחור וליישם אסטרטגיות למידה יעילות בהתאם למשימה ולמטרה.",
+          "בקשת עזרה": "היכולת לזהות קושי ולפנות ביוזמה לקבלת סיוע מתאים ממורה, חבר או מערכת דיגיטלית.",
+          "תגובה למשוב": "היכולת להבין, לקבל וליישם משוב בצורה בונה כחלק מתהליך למידה מתמשך.",
+          "העדפות אישיות בלמידה": "הדרכים והסגנונות הייחודיים שבהם הלומד מעדיף ללמוד ולעבד מידע."
+        }
       }
     ];
 
     let selectedCategory = null;
+    let selectedSubcategory = null;
     let subCircles = [];
+    let subSubCircles = [];
 
     function createCircles() {
       const container = document.getElementById('circlesContainer');
@@ -341,10 +472,8 @@
         const circle = document.createElement('div');
         circle.className = 'main-circle';
         circle.setAttribute('data-index', index);
-        circle.style.left = `${x - 50}px`;
-        circle.style.top = `${y - 50}px`;
-        circle.style.width = '100px';
-        circle.style.height = '100px';
+        circle.style.left = `${x - 70}px`;
+        circle.style.top = `${y - 70}px`;
         circle.style.backgroundColor = category.color;
         
         const label = document.createElement('div');
@@ -365,11 +494,12 @@
       const mainRect = mainCircle.getBoundingClientRect();
       const containerRect = container.getBoundingClientRect();
       
-      const mainX = mainRect.left - containerRect.left + 50;
-      const mainY = mainRect.top - containerRect.top + 50;
+      const mainX = mainRect.left - containerRect.left + 70;
+      const mainY = mainRect.top - containerRect.top + 70;
       
       // מחיקת עיגולי משנה קיימים
       clearSubCircles();
+      clearSubSubCircles();
       
       category.details.forEach((detail, index) => {
         const angle = (index * 360 / category.details.length) * Math.PI / 180;
@@ -379,6 +509,7 @@
         
         const subCircle = document.createElement('div');
         subCircle.className = 'sub-circle';
+        subCircle.setAttribute('data-subcategory', detail);
         subCircle.style.left = `${x - 60}px`;
         subCircle.style.top = `${y - 60}px`;
         subCircle.style.borderColor = category.color;
@@ -393,11 +524,64 @@
         
         subCircle.addEventListener('click', (e) => {
           e.stopPropagation();
-          showDetailTooltip(detail, e.target);
+          if (category.subcategories && category.subcategories[detail]) {
+            selectSubcategory(categoryIndex, detail, subCircle);
+          } else {
+            showDetailTooltip(detail, e.target);
+          }
         });
         
         container.appendChild(subCircle);
         subCircles.push(subCircle);
+      });
+    }
+
+    function createSubSubCircles(categoryIndex, subcategoryName, parentCircle) {
+      const container = document.getElementById('circlesContainer');
+      const category = categories[categoryIndex];
+      const subcategory = category.subcategories[subcategoryName];
+      
+      if (!subcategory || !subcategory.details) return;
+      
+      const parentRect = parentCircle.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      
+      const parentX = parentRect.left - containerRect.left + 60;
+      const parentY = parentRect.top - containerRect.top + 60;
+      
+      // מחיקת עיגולי משנה-משנה קיימים
+      clearSubSubCircles();
+      
+      subcategory.details.forEach((detail, index) => {
+        const angle = (index * 360 / subcategory.details.length) * Math.PI / 180;
+        const distance = 120;
+        const x = parentX + distance * Math.cos(angle);
+        const y = parentY + distance * Math.sin(angle);
+        
+        const subSubCircle = document.createElement('div');
+        subSubCircle.className = 'sub-circle';
+        subSubCircle.style.left = `${x - 50}px`;
+        subSubCircle.style.top = `${y - 50}px`;
+        subSubCircle.style.width = '100px';
+        subSubCircle.style.height = '100px';
+        subSubCircle.style.borderColor = category.color;
+        subSubCircle.style.color = category.color;
+        subSubCircle.style.fontSize = '10px';
+        subSubCircle.textContent = detail;
+        subSubCircle.title = detail;
+        
+        // הוספת עיכוב לאנימציה
+        setTimeout(() => {
+          subSubCircle.classList.add('show');
+        }, index * 100);
+        
+        subSubCircle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          showDetailTooltip(detail, e.target);
+        });
+        
+        container.appendChild(subSubCircle);
+        subSubCircles.push(subSubCircle);
       });
     }
 
@@ -406,6 +590,36 @@
         circle.remove();
       });
       subCircles = [];
+    }
+
+    function clearSubSubCircles() {
+      subSubCircles.forEach(circle => {
+        circle.remove();
+      });
+      subSubCircles = [];
+    }
+
+    function selectSubcategory(categoryIndex, subcategoryName, subCircle) {
+      if (selectedSubcategory === subcategoryName) {
+        selectedSubcategory = null;
+        clearSubSubCircles();
+        subCircles.forEach(circle => {
+          circle.classList.remove('active', 'dimmed');
+        });
+        showDetails(categoryIndex);
+      } else {
+        selectedSubcategory = subcategoryName;
+        subCircles.forEach(circle => {
+          circle.classList.remove('active', 'dimmed');
+          if (circle.getAttribute('data-subcategory') === subcategoryName) {
+            circle.classList.add('active');
+          } else {
+            circle.classList.add('dimmed');
+          }
+        });
+        createSubSubCircles(categoryIndex, subcategoryName, subCircle);
+        showSubcategoryDetails(categoryIndex, subcategoryName);
+      }
     }
 
     function showDetailTooltip(detail, element) {
@@ -452,13 +666,16 @@
       
       if (selectedCategory === index) {
         selectedCategory = null;
+        selectedSubcategory = null;
         circles.forEach(circle => {
           circle.classList.remove('active', 'dimmed');
         });
         clearSubCircles();
+        clearSubSubCircles();
         showPlaceholder();
       } else {
         selectedCategory = index;
+        selectedSubcategory = null;
         circles.forEach((circle, i) => {
           circle.classList.remove('active', 'dimmed');
           if (i === index) {
@@ -467,6 +684,7 @@
             circle.classList.add('dimmed');
           }
         });
+        clearSubSubCircles();
         createSubCircles(index);
         showDetails(index);
       }
@@ -488,11 +706,69 @@
         `;
       } else {
         const detailsList = category.details.map(detail => `<li>${detail}</li>`).join('');
+        
+        let legendHtml = '';
+        if (category.legend) {
+          const legendItems = Object.entries(category.legend).map(([term, definition]) => 
+            `<div class="legend-item">
+              <div class="legend-term">${term}</div>
+              <div class="legend-definition">${definition}</div>
+            </div>`
+          ).join('');
+          
+          legendHtml = `
+            <div class="legend-section">
+              <h3>מקראה</h3>
+              ${legendItems}
+            </div>
+          `;
+        }
+        
         panel.innerHTML = `
           <h2>${category.name}</h2>
           <ul>${detailsList}</ul>
+          ${legendHtml}
         `;
       }
+    }
+
+    function showSubcategoryDetails(categoryIndex, subcategoryName) {
+      const category = categories[categoryIndex];
+      const subcategory = category.subcategories[subcategoryName];
+      const panel = document.getElementById('detailsPanel');
+      
+      if (!subcategory || !subcategory.details) {
+        panel.innerHTML = `
+          <h2>${subcategoryName}</h2>
+          <p class="placeholder-text">פירוט יתווסף בקרוב...</p>
+        `;
+        return;
+      }
+      
+      const detailsList = subcategory.details.map(detail => `<li>${detail}</li>`).join('');
+      
+      let legendHtml = '';
+      if (subcategory.legend) {
+        const legendItems = Object.entries(subcategory.legend).map(([term, definition]) => 
+          `<div class="legend-item">
+            <div class="legend-term">${term}</div>
+            <div class="legend-definition">${definition}</div>
+          </div>`
+        ).join('');
+        
+        legendHtml = `
+          <div class="legend-section">
+            <h3>מקראה</h3>
+            ${legendItems}
+          </div>
+        `;
+      }
+      
+      panel.innerHTML = `
+        <h2>${subcategoryName}</h2>
+        <ul>${detailsList}</ul>
+        ${legendHtml}
+      `;
     }
 
     async function onConfigChange(config) {
@@ -599,5 +875,5 @@
 
     createCircles();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99b7eae7b3fba9bd',t:'MTc2MjYzNDc2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99b7f88d6158a9bd',t:'MTc2MjYzNTMyMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
