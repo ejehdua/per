@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>פרופיל תלמיד השלם</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      padding: 40px 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .header h1 {
+      color: #ffffff;
+      font-size: 48px;
+      margin: 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .content-wrapper {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+      min-height: 600px;
+    }
+
+    .circles-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      min-width: 600px;
+      min-height: 600px;
+    }
+
+    .main-circle {
+      position: absolute;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      border: 3px solid rgba(255,255,255,0.3);
+    }
+
+    .main-circle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+    }
+
+    .main-circle.active {
+      transform: scale(1.2);
+      z-index: 100;
+      box-shadow: 0 15px 45px rgba(0,0,0,0.35);
+    }
+
+    .main-circle.dimmed {
+      opacity: 0.4;
+      transform: scale(0.9);
+    }
+
+    .circle-label {
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+      text-align: center;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      padding: 10px;
+      line-height: 1.2;
+      max-width: 80px;
+    }
+
+    .sub-circle {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+      text-align: center;
+      padding: 12px;
+      box-sizing: border-box;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      border: 2px solid;
+      opacity: 0;
+      transform: scale(0);
+      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      cursor: pointer;
+      z-index: 50;
+      line-height: 1.1;
+      overflow: hidden;
+    }
+
+    .sub-circle.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .sub-circle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    .details-panel {
+      flex: 1;
+      min-width: 300px;
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      min-height: 400px;
+    }
+
+    .details-panel h2 {
+      color: #667eea;
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 28px;
+      border-bottom: 3px solid #667eea;
+      padding-bottom: 10px;
+    }
+
+    .details-panel ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .details-panel li {
+      padding: 12px 0;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 16px;
+      color: #333;
+      position: relative;
+      padding-right: 25px;
+    }
+
+    .details-panel li:last-child {
+      border-bottom: none;
+    }
+
+    .details-panel li:before {
+      content: "✓";
+      position: absolute;
+      right: 0;
+      color: #667eea;
+      font-weight: bold;
+    }
+
+    .placeholder-text {
+      color: #999;
+      font-style: italic;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    @media (max-width: 768px) {
+      .content-wrapper {
+        flex-direction: column;
+        min-height: 500px;
+      }
+
+      .circles-container {
+        min-width: 400px;
+        min-height: 400px;
+      }
+
+      .main-circle {
+        width: 80px !important;
+        height: 80px !important;
+      }
+
+      .circle-label {
+        font-size: 12px;
+        max-width: 60px;
+      }
+
+      .sub-circle {
+        width: 80px;
+        height: 80px;
+        font-size: 9px;
+        padding: 8px;
+      }
+
+      .header h1 {
+        font-size: 32px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container">
+   <div class="header">
+    <h1 id="main-title">פרופיל תלמיד השלם</h1>
+   </div>
+   <div class="content-wrapper">
+    <div class="circles-container" id="circlesContainer"><!-- העיגולים ייווצרו דינמית -->
+    </div>
+    <div class="details-panel" id="detailsPanel">
+     <p class="placeholder-text">לחץ על אחד מהעיגולים כדי לראות פירוט</p>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      main_title: "פרופיל תלמיד השלם",
+      primary_color: "#667eea",
+      secondary_color: "#764ba2",
+      text_color: "#ffffff",
+      background_color: "#ffffff",
+      accent_color: "#e0e0e0",
+      font_family: "Segoe UI",
+      font_size: 16
+    };
+
+    const categories = [
+      {
+        name: "נתונים אישיים",
+        color: "#FF6B6B",
+        details: [
+          "נתונים דמוגרפיים בסיסיים",
+          "רקע משפחתי",
+          "מצב חברתי ושייכות",
+          "חוזקות אישיות",
+          "אתגרים אישיים",
+          "התאמות בלמידה"
+        ]
+      },
+      {
+        name: "ידע",
+        color: "#45B7D1",
+        details: [
+          "ידע עולם",
+          "ידע קודם דיסיפלינרי",
+          "תפיסות שגויות",
+          "ידע נרכש",
+          "רמות חשיבה"
+        ]
+      },
+      {
+        name: "כישורים ומיומנויות",
+        color: "#98D8C8",
+        details: [
+          "מיומנויות חברתיות-רגשיות: תקשורת - העברת מסר",
+          "מיומנויות חברתיות-רגשיות: עבודת צוות",
+          "מיומנויות חברתיות-רגשיות: מודעות והתנהלות חברתית",
+          "מיומנויות חברתיות-רגשיות: מודעות עצמית",
+          "מיומנויות תפקודיות: ניהול עצמי",
+          "מיומנויות תפקודיות: חוסן והסתגלות לשינויים",
+          "מיומנויות קוגניטיביות: חשיבה ביקורתית",
+          "מיומנויות קוגניטיביות: חשיבה יצירתית ופתרון בעיות",
+          "מיומנויות קוגניטיביות: קבלת החלטות",
+          "מיומנויות אורייניות: אוריינות לשונית – איתור מידע, פרשנות והיסק",
+          "מיומנויות אורייניות: אוריינות לשונית – הבעה בכתב",
+          "מיומנויות אורייניות: אוריינות לשונית – הבעה בעל פה",
+          "מיומנויות אורייניות: חשיבה ביקורתית – טיעון",
+          "מיומנויות אורייניות: חשיבה יצירתית – סקרנות ומקוריות",
+          "מיומנויות אורייניות: חשיבה יצירתית – גמישות מחשבתית",
+          "מיומנויות אורייניות: חשיבה יצירתית – יצירת הקשרים חדשים",
+          "מיומנויות אורייניות: אוריינות דיגיטלית – צריכה ויצירה של תוכן",
+          "מיומנויות אורייניות: אוריינות מידע – כלל יכולות הליבה",
+          "מיומנויות דיסציפלינריות: עדין בתהליך גיבוש מול הדיסיפלינות"
+        ]
+      },
+      {
+        name: "מוטיבציה",
+        color: "#F7DC6F",
+        details: [
+          "סוג מוטיבציה: פנימית או חיצונית או התרסה",
+          "עוצמת מוטיבציה",
+          "קשר, שייכות ובטחון",
+          "אוטונומיה",
+          "מצפן פנימי",
+          "מסוגלות"
+        ]
+      },
+      {
+        name: "מאפייני למידה",
+        color: "#FFA07A",
+        details: [
+          "נוכחות ומעורבות בלמידה",
+          "רמת השקעה והתמדה",
+          "עצמאות בלמידה",
+          "שימוש באסטרטגיות למידה",
+          "בקשת עזרה",
+          "תגובה למשוב",
+          "העדפות אישיות בלמידה"
+        ]
+      }
+    ];
+
+    let selectedCategory = null;
+    let subCircles = [];
+
+    function createCircles() {
+      const container = document.getElementById('circlesContainer');
+      const centerX = 300;
+      const centerY = 300;
+      const radius = 180;
+      
+      categories.forEach((category, index) => {
+        const angle = (index * 360 / categories.length) * Math.PI / 180;
+        const x = centerX + radius * Math.cos(angle);
+        const y = centerY + radius * Math.sin(angle);
+        
+        const circle = document.createElement('div');
+        circle.className = 'main-circle';
+        circle.setAttribute('data-index', index);
+        circle.style.left = `${x - 50}px`;
+        circle.style.top = `${y - 50}px`;
+        circle.style.width = '100px';
+        circle.style.height = '100px';
+        circle.style.backgroundColor = category.color;
+        
+        const label = document.createElement('div');
+        label.className = 'circle-label';
+        label.textContent = category.name;
+        circle.appendChild(label);
+        
+        circle.addEventListener('click', () => selectCategory(index));
+        
+        container.appendChild(circle);
+      });
+    }
+
+    function createSubCircles(categoryIndex) {
+      const container = document.getElementById('circlesContainer');
+      const category = categories[categoryIndex];
+      const mainCircle = container.querySelector(`[data-index="${categoryIndex}"]`);
+      const mainRect = mainCircle.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      
+      const mainX = mainRect.left - containerRect.left + 50;
+      const mainY = mainRect.top - containerRect.top + 50;
+      
+      // מחיקת עיגולי משנה קיימים
+      clearSubCircles();
+      
+      category.details.forEach((detail, index) => {
+        const angle = (index * 360 / category.details.length) * Math.PI / 180;
+        const distance = 160;
+        const x = mainX + distance * Math.cos(angle);
+        const y = mainY + distance * Math.sin(angle);
+        
+        const subCircle = document.createElement('div');
+        subCircle.className = 'sub-circle';
+        subCircle.style.left = `${x - 60}px`;
+        subCircle.style.top = `${y - 60}px`;
+        subCircle.style.borderColor = category.color;
+        subCircle.style.color = category.color;
+        subCircle.textContent = detail;
+        subCircle.title = detail;
+        
+        // הוספת עיכוב לאנימציה
+        setTimeout(() => {
+          subCircle.classList.add('show');
+        }, index * 100);
+        
+        subCircle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          showDetailTooltip(detail, e.target);
+        });
+        
+        container.appendChild(subCircle);
+        subCircles.push(subCircle);
+      });
+    }
+
+    function clearSubCircles() {
+      subCircles.forEach(circle => {
+        circle.remove();
+      });
+      subCircles = [];
+    }
+
+    function showDetailTooltip(detail, element) {
+      // הסרת tooltip קיים
+      const existingTooltip = document.querySelector('.detail-tooltip');
+      if (existingTooltip) {
+        existingTooltip.remove();
+      }
+      
+      const tooltip = document.createElement('div');
+      tooltip.className = 'detail-tooltip';
+      tooltip.textContent = detail;
+      tooltip.style.cssText = `
+        position: absolute;
+        background: rgba(0,0,0,0.9);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        max-width: 200px;
+        z-index: 1000;
+        pointer-events: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      `;
+      
+      const rect = element.getBoundingClientRect();
+      const containerRect = document.getElementById('circlesContainer').getBoundingClientRect();
+      
+      tooltip.style.left = `${rect.left - containerRect.left + 30}px`;
+      tooltip.style.top = `${rect.top - containerRect.top - 40}px`;
+      
+      document.getElementById('circlesContainer').appendChild(tooltip);
+      
+      // הסרת tooltip אחרי 3 שניות
+      setTimeout(() => {
+        if (tooltip.parentNode) {
+          tooltip.remove();
+        }
+      }, 3000);
+    }
+
+    function selectCategory(index) {
+      const circles = document.querySelectorAll('.main-circle');
+      
+      if (selectedCategory === index) {
+        selectedCategory = null;
+        circles.forEach(circle => {
+          circle.classList.remove('active', 'dimmed');
+        });
+        clearSubCircles();
+        showPlaceholder();
+      } else {
+        selectedCategory = index;
+        circles.forEach((circle, i) => {
+          circle.classList.remove('active', 'dimmed');
+          if (i === index) {
+            circle.classList.add('active');
+          } else {
+            circle.classList.add('dimmed');
+          }
+        });
+        createSubCircles(index);
+        showDetails(index);
+      }
+    }
+
+    function showPlaceholder() {
+      const panel = document.getElementById('detailsPanel');
+      panel.innerHTML = '<p class="placeholder-text">לחץ על אחד מהעיגולים כדי לראות פירוט</p>';
+    }
+
+    function showDetails(index) {
+      const category = categories[index];
+      const panel = document.getElementById('detailsPanel');
+      
+      if (category.details.length === 0) {
+        panel.innerHTML = `
+          <h2>${category.name}</h2>
+          <p class="placeholder-text">פירוט יתווסף בקרוב...</p>
+        `;
+      } else {
+        const detailsList = category.details.map(detail => `<li>${detail}</li>`).join('');
+        panel.innerHTML = `
+          <h2>${category.name}</h2>
+          <ul>${detailsList}</ul>
+        `;
+      }
+    }
+
+    async function onConfigChange(config) {
+      const baseSize = config.font_size || defaultConfig.font_size;
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseFontStack = 'Tahoma, Geneva, Verdana, sans-serif';
+      
+      document.getElementById('main-title').textContent = config.main_title || defaultConfig.main_title;
+      document.getElementById('main-title').style.fontFamily = `${customFont}, ${baseFontStack}`;
+      document.getElementById('main-title').style.fontSize = `${baseSize * 3}px`;
+      document.getElementById('main-title').style.color = config.text_color || defaultConfig.text_color;
+      
+      document.body.style.background = `linear-gradient(135deg, ${config.primary_color || defaultConfig.primary_color} 0%, ${config.secondary_color || defaultConfig.secondary_color} 100%)`;
+      
+      const detailsPanel = document.getElementById('detailsPanel');
+      detailsPanel.style.backgroundColor = config.background_color || defaultConfig.background_color;
+      detailsPanel.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      detailsPanel.style.fontSize = `${baseSize}px`;
+      
+      const h2Elements = detailsPanel.querySelectorAll('h2');
+      h2Elements.forEach(h2 => {
+        h2.style.color = config.primary_color || defaultConfig.primary_color;
+        h2.style.borderBottomColor = config.primary_color || defaultConfig.primary_color;
+        h2.style.fontSize = `${baseSize * 1.75}px`;
+        h2.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      });
+      
+      const liElements = detailsPanel.querySelectorAll('li');
+      liElements.forEach(li => {
+        li.style.borderBottomColor = config.accent_color || defaultConfig.accent_color;
+        li.style.fontSize = `${baseSize}px`;
+        li.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      });
+      
+      const beforeElements = detailsPanel.querySelectorAll('li:before');
+      beforeElements.forEach(before => {
+        before.style.color = config.primary_color || defaultConfig.primary_color;
+      });
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.primary_color || defaultConfig.primary_color,
+              set: (value) => {
+                config.primary_color = value;
+                window.elementSdk.setConfig({ primary_color: value });
+              }
+            },
+            {
+              get: () => config.secondary_color || defaultConfig.secondary_color,
+              set: (value) => {
+                config.secondary_color = value;
+                window.elementSdk.setConfig({ secondary_color: value });
+              }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            },
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.accent_color || defaultConfig.accent_color,
+              set: (value) => {
+                config.accent_color = value;
+                window.elementSdk.setConfig({ accent_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["main_title", config.main_title || defaultConfig.main_title]
+        ])
+      });
+    }
+
+    createCircles();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99b7eae7b3fba9bd',t:'MTc2MjYzNDc2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
