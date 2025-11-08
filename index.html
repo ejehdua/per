@@ -260,6 +260,39 @@
       line-height: 1.4;
     }
 
+    .back-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255,255,255,0.9);
+      border: 2px solid #667eea;
+      border-radius: 50px;
+      padding: 12px 20px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #667eea;
+      font-size: 14px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+      z-index: 200;
+    }
+
+    .back-button.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .back-button:hover {
+      background: #667eea;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
     @media (max-width: 768px) {
       .content-wrapper {
         flex-direction: column;
@@ -304,6 +337,9 @@
    </div>
    <div class="content-wrapper">
     <div class="circles-container" id="circlesContainer"><!-- העיגולים ייווצרו דינמית -->
+     <div class="back-button" id="backButton">
+      ← חזרה
+     </div>
     </div>
     <div class="details-panel" id="detailsPanel">
      <p class="placeholder-text">לחץ על אחד מהעיגולים כדי לראות פירוט</p>
@@ -319,7 +355,7 @@
       background_color: "#ffffff",
       accent_color: "#e0e0e0",
       font_family: "Segoe UI",
-      font_size: 16
+      font_size: 18
     };
 
     const categories = [
@@ -429,7 +465,7 @@
         }
       },
       {
-        name: "מוטיבציה",
+        name: "צרכי עומק ומוטיבציה",
         color: "#F7DC6F",
         details: [
           "סוג מוטיבציה: פנימית או חיצונית או התרסה",
@@ -679,6 +715,7 @@
 
     function selectCategory(index) {
       const circles = document.querySelectorAll('.main-circle');
+      const backButton = document.getElementById('backButton');
       
       if (selectedCategory === index) {
         selectedCategory = null;
@@ -688,6 +725,7 @@
         });
         clearSubCircles();
         clearSubSubCircles();
+        backButton.classList.remove('show');
         showPlaceholder();
       } else {
         selectedCategory = index;
@@ -702,7 +740,23 @@
         });
         clearSubSubCircles();
         createSubCircles(index);
+        backButton.classList.add('show');
         showDetails(index);
+      }
+    }
+
+    function goBack() {
+      if (selectedSubcategory) {
+        // אם אנחנו בתת-קטגוריה, חזור לקטגוריה הראשית
+        selectedSubcategory = null;
+        clearSubSubCircles();
+        subCircles.forEach(circle => {
+          circle.classList.remove('active', 'dimmed');
+        });
+        showDetails(selectedCategory);
+      } else if (selectedCategory !== null) {
+        // אם אנחנו בקטגוריה ראשית, חזור לתצוגה הכללית
+        selectCategory(selectedCategory); // זה יסגור את הקטגוריה
       }
     }
 
@@ -880,6 +934,9 @@
     }
 
     createCircles();
+    
+    // חיבור כפתור החזרה
+    document.getElementById('backButton').addEventListener('click', goBack);
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99b7fc927488a9bd',t:'MTc2MjYzNTQ4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99b8251175c0a9bd',t:'MTc2MjYzNzE0Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
